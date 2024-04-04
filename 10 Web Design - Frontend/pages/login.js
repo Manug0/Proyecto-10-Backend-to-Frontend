@@ -124,8 +124,6 @@ const registerSubmit = async () => {
 			throw new Error("Error al registrarse");
 		}
 
-		// const dataRes = await response.json();
-
 		console.log("Usuario registrado con éxito");
 
 		Login();

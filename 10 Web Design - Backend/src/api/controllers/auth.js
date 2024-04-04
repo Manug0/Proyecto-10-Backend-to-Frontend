@@ -34,7 +34,7 @@ const loginUser = async (req, res, next) => {
 				const token = generateSecret(user._id);
 				return res.status(200).json({ user, token });
 			} else {
-				return res.status(400).json("Usuario o contraseña incorrectoss");
+				return res.status(400).json("Usuario o contraseña incorrectos");
 			}
 		} else {
 			return res.status(400).json("Usuario o contraseña incorrectos");
