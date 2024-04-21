@@ -223,6 +223,7 @@ nav a:hover {
 }
 .event-list img {
 	width: 100%;
+	max-width: 320px;
 	height: auto;
 
 	border-top-left-radius: 4px;
@@ -582,7 +583,7 @@ form input[type="email"] {
 
 	.create-event-button {
 		left: 60px;
-		top: 120px;
+		top: 90px;
 	}
 
 	.event-list {

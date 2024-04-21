@@ -187,7 +187,7 @@ const getEvents = async () => {
 	}
 };
 
-export const Events = async () => {
+const Events = async () => {
 	document.querySelector("main").innerHTML = events();
 	getEvents();
 

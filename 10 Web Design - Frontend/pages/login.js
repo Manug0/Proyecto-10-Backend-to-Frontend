@@ -1,31 +1,34 @@
 import Events from "./events";
 
-const login = () => `
-<section class="login">
-${
-	localStorage.getItem("user")
-		? Events()``
-		: ` <div class="overlay">
-          <div class="login-popup">
-            <form class="login-form">
+const login = () => {
+	return `
+	<section class="login">
+	${
+		localStorage.getItem("user")
+			? Events()``
+			: `	
+				<div class="overlay">
+					<div class="login-popup">
+						<form class="login-form">
 							<i class="ri-close-line"></i>
-              <label for="username">Nombre de usuario:</label>
-              <input type="text" class="username" name="username" required />
-              <label for="password">Contraseña:</label>
-              <input type="password" class="password" name="password" required />
-              <div class="login-buttons">
-                <button class="submit">Iniciar sesión</button>
-                <button class="register-btn">Registrarse</button>
-              </div>
-              <p class="login-msg">Inicio de sesión correcto</p>
-              <p class="wrong-login-msg">Usuario o contraseña incorrectos</p>
-              <p class="register-msg">Usuario registrado</p>
-            </form>
-          </div>
-        </div>`
-}
-</section>
-`;
+							<label for="username">Nombre de usuario:</label>
+							<input type="text" class="username" name="username" required />
+							<label for="password">Contraseña:</label>
+							<input type="password" class="password" name="password" required />
+							<div class="login-buttons">
+								<button class="submit">Iniciar sesión</button>
+								<button class="register-btn">Registrarse</button>
+							</div>
+							<p class="login-msg">Inicio de sesión correcto</p>
+							<p class="wrong-login-msg">Usuario o contraseña incorrectos</p>
+							<p class="register-msg">Usuario registrado</p>
+						</form>
+					</div>
+				</div>`
+	}
+	</section>
+	`;
+};
 
 const loginSubmit = async () => {
 	const username = document.querySelector(".username").value;
