@@ -6,6 +6,12 @@ import "./style.css";
 Login();
 
 const loginNav = document.getElementById("explorelink");
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+	loginNav.innerText = "Logout";
+}
+
 loginNav.addEventListener("click", () => {
 	localStorage.removeItem("user");
 	location.reload();

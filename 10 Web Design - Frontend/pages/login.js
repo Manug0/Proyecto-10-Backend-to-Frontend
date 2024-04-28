@@ -21,7 +21,6 @@ const login = () => {
 							</div>
 							<p class="login-msg">Inicio de sesión correcto</p>
 							<p class="wrong-login-msg">Usuario o contraseña incorrectos</p>
-							<p class="register-msg">Usuario registrado</p>
 						</form>
 					</div>
 				</div>`
@@ -35,6 +34,8 @@ const loginSubmit = async () => {
 	const password = document.querySelector(".password").value;
 	const badLogin = document.querySelector(".wrong-login-msg");
 	const goodLogin = document.querySelector(".login-msg");
+	const focusInputUsername = document.querySelector(".username");
+	const focusInputPassword = document.querySelector(".password");
 
 	const response = await fetch("http://localhost:3000/api/v1/auth/login", {
 		headers: {
@@ -56,9 +57,21 @@ const loginSubmit = async () => {
 		setTimeout(location.reload(), 1500);
 	} else {
 		badLogin.style.display = "flex";
-		setTimeout(function () {
-			badLogin.style.display = "none";
-		}, 1501);
+		focusInputPassword.addEventListener("input", function () {
+			if (!focusInputPassword.checkValidity()) {
+				focusInputPassword.style.border = "1px solid red";
+			} else {
+				focusInputPassword.style.border = "";
+			}
+		});
+
+		focusInputUsername.addEventListener("input", function () {
+			if (!focusInputUsername.checkValidity()) {
+				focusInputUsername.style.border = "1px solid red";
+			} else {
+				focusInputUsername.style.border = "";
+			}
+		});
 	}
 };
 
@@ -81,13 +94,15 @@ export const Login = async () => {
 
 const register = () => {
 	document.querySelector(".login-popup").innerHTML = `
-	<i class="ri-close-line"></i>
 	<form class="register-form">
+		<i class="ri-close-line"></i>
 		<input type="text" class="usernameReg" placeholder="Nombre de usuario" required>
-		<input type="email" class="emailReg" placeholder="Correo electrónico" required>
+		<input class="emailReg" type="email" id="email" name="email" placeholder="Email" required>
 		<input type="password" class="passwordReg" placeholder="Contraseña" required>
 		<button type="submit" class="registerSubmit">Registrarse</button>
 		<button class="backLogin">Volver a iniciar sesión</button>
+		<p class="reg-msg">Usuario registrado correctamente</p>
+		<p class="wrong-reg-msg">Error al registrarse</p>
 	</form>
 	`;
 
@@ -105,10 +120,17 @@ const register = () => {
 	});
 };
 
-const registerSubmit = async () => {
+const registerSubmit = async (ev) => {
 	const username = document.querySelector(".usernameReg").value;
 	const email = document.querySelector(".emailReg").value;
 	const password = document.querySelector(".passwordReg").value;
+
+	const usernameInput = document.querySelector(".usernameReg");
+	const emailInput = document.querySelector(".emailReg");
+	const passwordInput = document.querySelector(".passwordReg");
+
+	const badReg = document.querySelector(".wrong-reg-msg");
+	const goodReg = document.querySelector(".reg-msg");
 
 	try {
 		const response = await fetch("http://localhost:3000/api/v1/auth/register", {
@@ -123,13 +145,54 @@ const registerSubmit = async () => {
 			}),
 		});
 
-		if (!response.ok) {
-			throw new Error("Error al registrarse");
+		if (usernameInput.value.length <= 4) {
+			badReg.innerText = "El nombre de usuario debe tener más de 4 carácteres";
+			badReg.style.display = "flex";
+
+			usernameInput.style.border = "1px solid red";
+			usernameInput.style.backgroundColor = "#FFCCCC";
+
+			ev.preventDefault();
+		} else {
+			usernameInput.style.border = "1px solid black";
+			usernameInput.style.backgroundColor = "white";
+			badReg.style.display = "none";
 		}
 
-		console.log("Usuario registrado con éxito");
+		let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+		if (!emailInput.value.match(emailPattern)) {
+			badReg.innerText = "Formato de email incorrecto";
+			badReg.style.display = "flex";
 
-		Login();
+			emailInput.style.border = "1px solid red";
+			emailInput.style.backgroundColor = "#FFCCCC";
+
+			ev.preventDefault();
+		} else {
+			emailInput.style.border = "1px solid black";
+			emailInput.style.backgroundColor = "white";
+			badReg.style.display = "none";
+		}
+
+		if (passwordInput.value.length <= 4) {
+			badReg.innerText = "La contraseña debe tener más de 4 carácteres";
+			badReg.style.display = "flex";
+
+			passwordInput.style.border = "1px solid red";
+			passwordInput.style.backgroundColor = "#FFCCCC";
+
+			ev.preventDefault();
+		} else {
+			passwordInput.style.border = "1px solid black";
+			passwordInput.style.backgroundColor = "white";
+			badReg.style.display = "none";
+		}
+
+		goodReg.style.display = "flex";
+		badReg.style.display = "none";
+		setTimeout(function () {
+			Login();
+		}, 1501);
 	} catch (error) {
 		console.log(error.message);
 	}
