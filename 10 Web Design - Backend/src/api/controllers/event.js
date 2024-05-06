@@ -27,18 +27,24 @@ const getEventById = async (req, res, next) => {
 
 const createEvent = async (req, res, next) => {
 	try {
-		const newEvent = new Event(req.body);
-		if (req.file) {
-			newEvent.poster = req.file.path;
-		}
+		const { name, date, location, description } = req.body;
+		const poster = req.file.path;
 
-		const saveEvent = await newEvent.save();
+		const newEvent = new Event({
+			name: name,
+			date: date,
+			location: location,
+			description: description,
+			poster: poster,
+		});
+
+		const savedEvent = await newEvent.save();
 
 		const user = await User.findById(req.user);
-		user.eventsCreated.push(req.event);
+		user.eventsCreated.push(savedEvent);
 		await user.save();
 
-		return res.status(201).json(saveEvent);
+		return res.status(201).json(savedEvent);
 	} catch (error) {
 		console.log(error);
 		return res.status(400).json(error);
