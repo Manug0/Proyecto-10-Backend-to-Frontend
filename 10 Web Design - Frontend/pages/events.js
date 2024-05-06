@@ -227,32 +227,25 @@ const eventSubmit = async () => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	const token = user.token;
 
-	try {
-		let formData = new FormData();
-		formData.append("name", name),
-			formData.append("date", date),
-			formData.append("location", location),
-			formData.append("description", description),
-			formData.append("poster", poster);
+	let formData = new FormData();
+	formData.append("name", name);
+	formData.append("date", date);
+	formData.append("location", location);
+	formData.append("description", description);
+	formData.append("poster", poster);
 
-		const response = await fetch("http://localhost:3000/api/v1/events/add", {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`,
-			},
-			method: "POST",
-			body: formData,
-		});
+	const response = await fetch("http://localhost:3000/api/v1/events/add", {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		method: "POST",
+		body: formData,
+	});
 
-		if (!poster) {
-			const posterButton = document.querySelector(".custom-file-upload");
-			posterButton.style.backgroundColor = "#d44f4f";
-			posterButton.innerText = "Debes añadir un poster";
-		}
-
-		console.log("Evento añadido");
-	} catch (error) {
-		console.log("Ha habido un error al crear el evento");
+	if (response.ok) {
+		getEvents();
+	} else {
+		alert("Ha habido un error al crear el evento");
 	}
 };
 

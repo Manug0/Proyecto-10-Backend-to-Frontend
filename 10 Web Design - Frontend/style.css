@@ -40,6 +40,11 @@ header {
 	box-shadow: 0 1px 16px hsla(0, 0%, 0%, 0.12);
 }
 
+#explorelink {
+	position: absolute;
+	right: 30px;
+}
+
 .hamburger {
 	display: none;
 }
@@ -52,8 +57,7 @@ nav {
 	display: flex;
 	gap: 50px;
 	font-size: 20px;
-	position: relative;
-	left: -50%;
+	margin: 0 auto;
 	height: 4rem;
 	align-items: center;
 }

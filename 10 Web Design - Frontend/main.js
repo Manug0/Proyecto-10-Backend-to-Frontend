@@ -9,7 +9,7 @@ const loginNav = document.getElementById("explorelink");
 const user = JSON.parse(localStorage.getItem("user"));
 
 if (user) {
-	loginNav.innerText = "Logout";
+	loginNav.innerHTML = `${user.user.username} <i class="ri-user-line"></i>`;
 }
 
 loginNav.addEventListener("click", () => {

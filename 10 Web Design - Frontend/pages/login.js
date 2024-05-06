@@ -145,7 +145,7 @@ const registerSubmit = async (ev) => {
 			}),
 		});
 
-		if (usernameInput.value.length <= 4) {
+		if (usernameInput.value.length < 4) {
 			badReg.innerText = "El nombre de usuario debe tener más de 4 carácteres";
 			badReg.style.display = "flex";
 
@@ -174,7 +174,7 @@ const registerSubmit = async (ev) => {
 			badReg.style.display = "none";
 		}
 
-		if (passwordInput.value.length <= 4) {
+		if (passwordInput.value.length < 4) {
 			badReg.innerText = "La contraseña debe tener más de 4 carácteres";
 			badReg.style.display = "flex";
 
