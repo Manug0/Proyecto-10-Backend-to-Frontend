@@ -213,11 +213,13 @@ const Events = async () => {
 	});
 
 	document.querySelector(".add-event-button").addEventListener("click", (ev) => {
-		eventSubmit();
+		eventSubmit(ev);
 	});
 };
 
-const eventSubmit = async () => {
+const eventSubmit = async (e) => {
+	e.preventDefault();
+
 	const name = document.querySelector(".name").value;
 	const date = document.querySelector(".date").value;
 	const location = document.querySelector(".location").value;
@@ -243,7 +245,7 @@ const eventSubmit = async () => {
 	});
 
 	if (response.ok) {
-		getEvents();
+		window.location.reload();
 	} else {
 		alert("Ha habido un error al crear el evento");
 	}
