@@ -1,4 +1,7 @@
 export const registrationForm = (user, event, token) => {
+	const formOverlay = document.createElement("div");
+	formOverlay.classList.add("overlay");
+
 	const form = document.createElement("form");
 	form.innerHTML = `
       <i class="ri-close-line"></i>
@@ -13,10 +16,13 @@ export const registrationForm = (user, event, token) => {
       <input type="submit" value="Apuntarse">
   `;
 
-	document.querySelector("#event-details").appendChild(form);
+	formOverlay.appendChild(form);
+
+	document.querySelector("#event-details").appendChild(formOverlay);
 
 	document.querySelector("#event-details .ri-close-line").addEventListener("click", () => {
 		form.remove();
+		formOverlay.remove();
 	});
 
 	form.addEventListener("submit", async (ev) => {

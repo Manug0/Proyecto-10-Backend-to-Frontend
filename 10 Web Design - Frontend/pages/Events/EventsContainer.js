@@ -10,6 +10,11 @@ const EventsContainer = async () => {
 	const events = await eventsData.json();
 	const eventsContainer = document.querySelector(".event-list");
 
+	if (!eventsContainer) {
+		console.error("No se encontró el contenedor de eventos");
+		return;
+	}
+
 	eventsContainer.innerHTML = "";
 
 	for (const event of events) {

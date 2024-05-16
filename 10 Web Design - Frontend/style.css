@@ -482,7 +482,6 @@ input[type="file"] {
 	min-width: 250px;
 	box-shadow: 0 1px 16px hsla(0, 0%, 0%, 0.12);
 	margin: auto;
-	margin-top: 20px;
 }
 #event-details form label {
 	display: block;

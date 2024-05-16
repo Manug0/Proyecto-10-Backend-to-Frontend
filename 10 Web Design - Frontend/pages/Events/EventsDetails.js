@@ -1,6 +1,6 @@
+import { Login } from "../Login/login";
 import { attendeesList } from "./AttendeesList";
 import registrationForm from "./RegistrationForm";
-import { Login } from "../login";
 
 export const EventDetails = async (event, user) => {
 	if (user) {
@@ -29,14 +29,19 @@ export const EventDetails = async (event, user) => {
                     <h3>${eventDetails.location}</h3>
                     <p>${eventDetails.description}</p>
                     <button class="register">Apuntarse</button>
-                </div>
-                <div class="attendees-list">
-                    <h4>Lista de asistentes</h4>
-                </div>
+                </div>							
+								<div class="attendees-list">
+										<h4>Lista de asistentes</h4>
+								</div>
             </div>
         `;
 
 		registrationForm(user, event, token);
+
+		document.querySelector(".register").addEventListener("click", () => {
+			registrationForm(user, event, token);
+		});
+
 		attendeesList(event, token);
 	} else {
 		alert("Tienes que estar conectado para ver los detalles del evento");
