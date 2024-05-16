@@ -14,6 +14,9 @@ const getUser = async (req, res, next) => {
 const userUpdate = async (req, res, next) => {
 	try {
 		const { id } = req.params;
+
+		delete req.body.rol;
+
 		const newUser = await User(req.body);
 		newUser._id = id;
 

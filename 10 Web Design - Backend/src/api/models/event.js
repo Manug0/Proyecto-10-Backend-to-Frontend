@@ -8,6 +8,7 @@ const eventSchema = new mongoose.Schema(
 		description: { type: String, required: false },
 		poster: { type: String, required: false },
 		attendees: [{ type: mongoose.Types.ObjectId, required: false, ref: "attendees" }],
+		// users: [{ type: mongoose.Types.ObjectId, required: false, ref: "users" }],
 	},
 	{
 		timestamps: true,

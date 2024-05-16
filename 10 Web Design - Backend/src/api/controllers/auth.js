@@ -5,6 +5,8 @@ const { generateSecret } = require("../../../utils/jwt");
 const registerUser = async (req, res, next) => {
 	try {
 		const newUser = new User(req.body);
+		req.body.rol = "user";
+
 		if (req.file) {
 			newUser.profilePic = req.file.path;
 		}
