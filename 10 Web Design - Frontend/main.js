@@ -1,4 +1,4 @@
-import Events from "./pages/events";
+import Events from "./pages/Events/events";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import "./style.css";

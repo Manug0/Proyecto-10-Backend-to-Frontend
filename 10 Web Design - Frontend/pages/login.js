@@ -1,4 +1,4 @@
-import Events from "./events";
+import Events from "./Events/events";
 
 const login = () => {
 	return `
@@ -19,7 +19,7 @@ const login = () => {
 								<button class="submit">Iniciar sesión</button>
 								<button class="register-btn">Registrarse</button>
 							</div>
-							<p class="login-msg">Inicio de sesión correcto</p>
+							<p class="login-msg">Sesión iniciada correctamente</p>
 							<p class="wrong-login-msg">Usuario o contraseña incorrectos</p>
 						</form>
 					</div>
@@ -29,49 +29,36 @@ const login = () => {
 	`;
 };
 
-const loginSubmit = async () => {
-	const username = document.querySelector(".username").value;
-	const password = document.querySelector(".password").value;
+const loginSubmit = async (username, password) => {
 	const badLogin = document.querySelector(".wrong-login-msg");
 	const goodLogin = document.querySelector(".login-msg");
-	const focusInputUsername = document.querySelector(".username");
-	const focusInputPassword = document.querySelector(".password");
 
-	const response = await fetch("http://localhost:3000/api/v1/auth/login", {
-		headers: {
-			"Content-Type": "application/json",
-		},
-		method: "POST",
-		body: JSON.stringify({
-			username: username,
-			password: password,
-		}),
-	});
-
-	const dataRes = await response.json();
-
-	if (response.ok) {
-		localStorage.setItem("user", JSON.stringify(dataRes));
-		badLogin.style.display = "none";
-		goodLogin.style.display = "flex";
-		setTimeout(location.reload(), 1500);
-	} else {
-		badLogin.style.display = "flex";
-		focusInputPassword.addEventListener("input", function () {
-			if (!focusInputPassword.checkValidity()) {
-				focusInputPassword.style.border = "1px solid red";
-			} else {
-				focusInputPassword.style.border = "";
-			}
+	try {
+		const response = await fetch("http://localhost:3000/api/v1/auth/login", {
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "POST",
+			body: JSON.stringify({ username, password }),
 		});
 
-		focusInputUsername.addEventListener("input", function () {
-			if (!focusInputUsername.checkValidity()) {
-				focusInputUsername.style.border = "1px solid red";
-			} else {
-				focusInputUsername.style.border = "";
+		const dataRes = await response.json();
+
+		if (response.ok) {
+			localStorage.setItem("user", JSON.stringify(dataRes));
+			if (badLogin) {
+				badLogin.style.display = "none";
 			}
-		});
+			if (goodLogin) {
+				goodLogin.style.display = "flex";
+			}
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			badLogin.style.display = "flex";
+			console.error(dataRes.message || "Error de inicio de sesión");
+		}
+	} catch (error) {
+		console.error("Error en la solicitud de inicio de sesión:", error);
 	}
 };
 
@@ -80,7 +67,9 @@ export const Login = async () => {
 
 	document.querySelector(".submit").addEventListener("click", (ev) => {
 		ev.preventDefault();
-		loginSubmit();
+		const username = document.querySelector(".username").value;
+		const password = document.querySelector(".password").value;
+		loginSubmit(username, password);
 	});
 
 	document.querySelector(".register-btn").addEventListener("click", () => {
@@ -190,9 +179,8 @@ const registerSubmit = async (ev) => {
 
 		goodReg.style.display = "flex";
 		badReg.style.display = "none";
-		setTimeout(function () {
-			Login();
-		}, 1501);
+
+		loginSubmit(username, password);
 	} catch (error) {
 		console.log(error.message);
 	}
