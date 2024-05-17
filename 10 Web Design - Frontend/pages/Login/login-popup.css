@@ -1,0 +1,141 @@
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(5px);
+}
+
+.login-popup {
+	position: relative;
+	background-color: var(--light-color);
+	padding: 20px;
+	border-radius: 10px;
+	width: 38%;
+	height: 50vh;
+}
+
+.login-popup .ri-close-line {
+	position: absolute;
+	color: rgb(255, 0, 0);
+	font-size: 25px;
+	top: 10px;
+	right: 10px;
+}
+
+.login-form,
+.register-form {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 23px;
+}
+
+.login-form input,
+.register-form input {
+	width: 100%;
+	height: 30px;
+	border-radius: 8px;
+	border: solid 1px black;
+	padding: 6px;
+	transition: background-color 0.5s ease;
+}
+
+.login-form input:focus,
+.register-form input:focus {
+	background-color: #d4d4d4;
+}
+
+.login-buttons {
+	display: flex;
+	margin-top: 30px;
+	justify-content: space-evenly;
+	gap: 15px;
+}
+
+.register-form {
+	align-items: center;
+}
+
+.register-form button {
+	width: 60%;
+}
+
+.login-buttons button,
+.register-form button {
+	color: #090909;
+	padding: 0.7em 1.7em;
+	font-size: 18px;
+	border-radius: 0.5em;
+	background: #e8e8e8;
+	cursor: pointer;
+	border: 1px solid #e8e8e8;
+	transition: all 0.3s;
+	box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+.login-buttons button:active,
+.register-form button:active {
+	color: #666;
+	box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+}
+
+.login-buttons button:hover,
+.register-form button:hover {
+	background-color: #3c3c3c;
+	color: #fff;
+}
+
+.login-form p,
+.register-form p {
+	display: none;
+}
+
+.login-msg,
+.reg-msg {
+	color: rgb(0, 218, 0);
+}
+
+.wrong-login-msg,
+.wrong-reg-msg {
+	color: red;
+}
+
+.login-msg,
+.reg-msg {
+	display: flex;
+	justify-content: center;
+	font-weight: 900;
+}
+
+.wrong-login-msg,
+.wrong-reg-msg {
+	display: flex;
+	justify-content: center;
+	font-weight: 900;
+	animation: login 0.1s forwards;
+}
+
+.overlay.active {
+	visibility: visible;
+}
+
+@media (max-width: 600px) {
+	.login-popup {
+		font-size: 10px;
+	}
+
+	.login-buttons button {
+		font-size: 10px;
+		padding: 0.7em 0em;
+	}
+
+	.login-popup input {
+		height: 1.2rem;
+	}
+}

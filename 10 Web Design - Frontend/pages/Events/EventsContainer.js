@@ -1,4 +1,5 @@
 import { EventDetails } from "./EventsDetails";
+import "./events.css";
 
 const EventsContainer = async () => {
 	const user = JSON.parse(localStorage.getItem("user"));

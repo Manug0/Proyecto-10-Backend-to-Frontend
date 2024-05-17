@@ -1,6 +1,8 @@
 import Events from "../Events/events";
 import { Register } from "./RegisterForm";
 import { loginSubmit } from "./loginSubmit";
+import "./login-popup.css";
+import "./forms.css";
 
 const LoginForm = () => {
 	return `

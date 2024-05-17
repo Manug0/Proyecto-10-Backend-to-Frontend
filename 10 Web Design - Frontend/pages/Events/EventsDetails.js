@@ -1,6 +1,8 @@
 import { Login } from "../Login/login";
 import { attendeesList } from "./AttendeesList";
 import registrationForm from "./RegistrationForm";
+import "./event-details.css";
+import "./create-event.css";
 
 export const EventDetails = async (event, user) => {
 	if (user) {

@@ -1,3 +1,4 @@
+import "./home.css";
 const home = () => `
 <section class="home">
   <h1>¡Bienvenido a Events App!</h1>

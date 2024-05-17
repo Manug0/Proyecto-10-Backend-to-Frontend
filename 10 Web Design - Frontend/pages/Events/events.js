@@ -2,6 +2,7 @@ import EventsContainer from "./EventsContainer";
 import { Login } from "../Login/login";
 import events from "./eventsHTML";
 import submitEvent from "./submitEvent";
+import "./events.css";
 
 const Events = async () => {
 	document.querySelector("main").innerHTML = events();
