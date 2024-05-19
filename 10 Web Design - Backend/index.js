@@ -4,7 +4,6 @@ const express = require("express");
 const { connectDB } = require("./src/config/db");
 const userRouter = require("./src/api/routes/user");
 const authRouter = require("./src/api/routes/auth");
-const attendeeRouter = require("./src/api/routes/attendee");
 const eventRouter = require("./src/api/routes/event");
 const cloudinary = require("cloudinary").v2;
 
@@ -30,7 +29,6 @@ app.use(express.json());
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/events", eventRouter);
-app.use("/api/v1/attendees", attendeeRouter);
 app.use("/api/v1/users", userRouter);
 
 app.use("*", (req, res, next) => {

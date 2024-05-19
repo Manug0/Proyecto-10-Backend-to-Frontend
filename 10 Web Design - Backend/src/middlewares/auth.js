@@ -6,19 +6,28 @@ const auth = async (req, res, next) => {
 		const token = req.headers.authorization;
 
 		if (!token) {
-			return res.status(400).json("Tienes que estar conectado para realizar esta función");
+			return res.status(401).json("Tienes que estar conectado para realizar esta función");
 		}
 
 		const parsedToken = token.replace("Bearer ", "");
-		const { id } = verifyJwt(parsedToken);
-		const user = await User.findById(id);
+		const decoded = verifyJwt(parsedToken);
 
-		user.password = null;
+		if (!decoded || !decoded.id) {
+			return res.status(401).json("Token inválido o no proporcionado");
+		}
+
+		const user = await User.findById(decoded.id);
+
+		if (!user) {
+			return res.status(404).json("Usuario no encontrado");
+		}
+
+		user.password = undefined;
 		req.user = user;
 		next();
 	} catch (error) {
 		console.log(error);
-		return res.status(400).json(error);
+		return res.status(500).json("Error en la autenticación");
 	}
 };
 

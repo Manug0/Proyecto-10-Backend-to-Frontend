@@ -7,8 +7,8 @@ const eventSchema = new mongoose.Schema(
 		location: { type: String, required: true },
 		description: { type: String, required: false },
 		poster: { type: String, required: false },
-		attendees: [{ type: mongoose.Types.ObjectId, required: false, ref: "attendees" }],
-		// users: [{ type: mongoose.Types.ObjectId, required: false, ref: "users" }],
+		attendees: [{ type: mongoose.Types.ObjectId, ref: "User" }],
+		creator: { type: mongoose.Types.ObjectId, ref: "User" },
 	},
 	{
 		timestamps: true,
@@ -16,6 +16,6 @@ const eventSchema = new mongoose.Schema(
 	}
 );
 
-const Event = mongoose.model("events", eventSchema, "events");
+const Event = mongoose.model("Event", eventSchema);
 
 module.exports = Event;

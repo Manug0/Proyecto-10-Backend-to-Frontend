@@ -2,46 +2,35 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { generateSecret } = require("../../../utils/jwt");
 
-const registerUser = async (req, res, next) => {
+const registerUser = async (req, res) => {
 	try {
-		const newUser = new User(req.body);
-		req.body.rol = "user";
-
-		if (req.file) {
-			newUser.profilePic = req.file.path;
+		const { username, password, email } = req.body;
+		const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+		if (existingUser) {
+			return res.status(400).json({ message: "El nombre de usuario o email ya existe" });
 		}
 
-		const userDuplicated = await User.findOne({
-			username: req.body.username,
-		});
-
-		if (userDuplicated) {
-			console.log("El nombre de usuario ya existe");
-		}
-
+		const newUser = new User({ username, password, email, rol: "user" });
+		if (req.file) newUser.profilePic = req.file.path;
 		const saveUser = await newUser.save();
-
 		return res.status(201).json(saveUser);
 	} catch (error) {
+		console.error(error);
 		return res.status(400).json(error);
 	}
 };
 
-const loginUser = async (req, res, next) => {
+const loginUser = async (req, res) => {
 	try {
-		const user = await User.findOne({ username: req.body.username });
-
-		if (user) {
-			if (bcrypt.compareSync(req.body.password, user.password)) {
-				const token = generateSecret(user._id);
-				return res.status(200).json({ user, token });
-			} else {
-				return res.status(400).json("Usuario o contraseña incorrectos");
-			}
-		} else {
+		const { username, password } = req.body;
+		const user = await User.findOne({ username });
+		if (!user || !bcrypt.compareSync(password, user.password)) {
 			return res.status(400).json("Usuario o contraseña incorrectos");
 		}
+		const token = generateSecret(user._id);
+		return res.status(200).json({ user, token });
 	} catch (error) {
+		console.error(error);
 		return res.status(400).json(error);
 	}
 };

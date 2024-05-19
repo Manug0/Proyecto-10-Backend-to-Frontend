@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema(
 		password: { type: String, required: true },
 		email: { type: String, required: true },
 		profilePic: { type: String, required: false },
-		eventsCreated: [{ type: mongoose.Types.ObjectId, required: false, ref: "events" }],
+		eventsCreated: [{ type: mongoose.Types.ObjectId, ref: "Event" }],
+		eventsConfirmed: [{ type: mongoose.Types.ObjectId, ref: "Event" }],
 		rol: {
 			type: String,
 			required: true,
@@ -25,6 +26,6 @@ userSchema.pre("save", function () {
 	this.password = bcrypt.hashSync(this.password, 12);
 });
 
-const User = mongoose.model("users", userSchema, "users");
+const User = mongoose.model("User", userSchema, "users");
 
 module.exports = User;

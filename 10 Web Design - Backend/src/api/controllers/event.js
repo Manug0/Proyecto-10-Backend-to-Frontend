@@ -1,52 +1,44 @@
 const { deleteFile } = require("../../../utils/deleteFile");
-const { verifyJwt } = require("../../../utils/jwt");
-const Attendee = require("../models/attendee");
 const Event = require("../models/event");
 const User = require("../models/user");
 
-const getEvent = async (req, res, next) => {
+const getEvent = async (req, res) => {
 	try {
-		const events = await Event.find().populate("attendees");
+		const events = await Event.find().populate("attendees").populate("creator");
 		return res.status(200).json(events);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return res.status(400).json(error);
 	}
 };
 
-const getEventById = async (req, res, next) => {
+const getEventById = async (req, res) => {
 	try {
 		const { id } = req.params;
-		const events = await Event.findById(id).populate("attendees");
-		return res.status(200).json(events);
+		const event = await Event.findById(id).populate("attendees").populate("creator");
+		return res.status(200).json(event);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return res.status(400).json(error);
 	}
 };
 
-const createEvent = async (req, res, next) => {
+const createEvent = async (req, res) => {
 	try {
 		const { name, date, location, description } = req.body;
-		const poster = req.file.path;
+		const creator = req.user._id;
+		const poster = req.file ? req.file.path : null;
 
-		const newEvent = new Event({
-			name: name,
-			date: date,
-			location: location,
-			description: description,
-			poster: poster,
-		});
-
+		const newEvent = new Event({ name, date, location, description, poster, creator });
 		const savedEvent = await newEvent.save();
 
-		const user = await User.findById(req.user);
-		user.eventsCreated.push(savedEvent);
+		const user = await User.findById(creator);
+		user.eventsCreated.push(savedEvent._id);
 		await user.save();
 
 		return res.status(201).json(savedEvent);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return res.status(400).json(error);
 	}
 };
@@ -54,18 +46,31 @@ const createEvent = async (req, res, next) => {
 const confirmEvent = async (req, res, next) => {
 	try {
 		const { name, email } = req.body;
-		const attendee = new Attendee({ name, email });
-		attendee.eventsConfirmed.push(req.params.id);
-		await attendee.save();
+
+		const user = await User.findOne({ email });
+		if (!user) {
+			return res.status(400).json({ message: "Usuario no encontrado" });
+		}
+
+		if (user.eventsConfirmed.includes(req.params.id)) {
+			return res.status(400).json({ message: "Ya estás registrado en este evento" });
+		}
+
+		user.eventsConfirmed.push(req.params.id);
+		await user.save();
 
 		const event = await Event.findById(req.params.id);
-		event.attendees.push(attendee);
+		if (!event) {
+			return res.status(400).json({ message: "Evento no encontrado" });
+		}
+
+		event.attendees.push({ _id: user._id, username: user.username });
 		await event.save();
 
-		return res.status(200).json({ message: "Te has apuntado al evento", attendee });
+		return res.status(200).json({ message: "Te has apuntado al evento", user });
 	} catch (error) {
-		console.log(error);
-		return res.status(400).json(error);
+		console.error(error);
+		return res.status(400).json({ message: "Ha ocurrido un error", error });
 	}
 };
 
