@@ -1,21 +1,31 @@
 export const attendeesList = async (event, token) => {
-	const attendeeData = await fetch(`http://localhost:3000/api/v1/attendees`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-	const attendeeDetails = await attendeeData.json();
-	const attendeesList = document.querySelector(".attendees-list");
-	const eventAttendees = attendeeDetails.filter((attendee) =>
-		attendee.eventsConfirmed.includes(event._id)
-	);
+	try {
+		const response = await fetch(`http://localhost:3000/api/v1/users`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		});
 
-	attendeesList.innerHTML = "";
+		if (!response.ok) {
+			throw new Error("Error al obtener los usuarios");
+		}
 
-	eventAttendees.forEach((attendee) => {
-		const attendeeItem = document.createElement("p");
-		attendeeItem.classList.add("confirmedAttendee");
-		attendeeItem.textContent = attendee.name;
-		attendeesList.appendChild(attendeeItem);
-	});
+		const userDetails = await response.json();
+		const attendeesListElement = document.querySelector(".attendees-list");
+
+		const eventAttendees = userDetails.filter(
+			(user) => user.eventsConfirmed && user.eventsConfirmed.some((e) => e._id === event._id)
+		);
+
+		attendeesListElement.innerHTML = "";
+
+		eventAttendees.forEach((user) => {
+			const attendeeItem = document.createElement("p");
+			attendeeItem.classList.add("confirmedAttendee");
+			attendeeItem.textContent = user.username;
+			attendeesListElement.appendChild(attendeeItem);
+		});
+	} catch (error) {
+		console.error("Error al obtener la lista de asistentes:", error);
+	}
 };

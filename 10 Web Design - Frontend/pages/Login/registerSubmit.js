@@ -1,6 +1,8 @@
 import { loginSubmit } from "./loginSubmit";
 
 const registerSubmit = async (ev) => {
+	ev.preventDefault(); // Prevent the form from submitting the default way
+
 	const username = document.querySelector(".usernameReg").value;
 	const email = document.querySelector(".emailReg").value;
 	const password = document.querySelector(".passwordReg").value;
@@ -12,60 +14,60 @@ const registerSubmit = async (ev) => {
 	const badReg = document.querySelector(".wrong-reg-msg");
 	const goodReg = document.querySelector(".reg-msg");
 
-	try {
-		const response = await fetch("http://localhost:3000/api/v1/auth/register", {
-			headers: {
-				"Content-Type": "application/json",
-			},
-			method: "POST",
-			body: JSON.stringify({
-				username,
-				email,
-				password,
-			}),
-		});
+	const validateForm = () => {
+		if (usernameInput.value.length < 4) {
+			badReg.innerText = "El nombre de usuario debe tener más de 4 caracteres";
+			badReg.style.display = "flex";
+			usernameInput.style.border = "1px solid red";
+			usernameInput.style.backgroundColor = "#FFCCCC";
+			return false;
+		} else {
+			usernameInput.style.border = "1px solid black";
+			usernameInput.style.backgroundColor = "white";
+			badReg.style.display = "none";
+		}
 
-		const validateForm = () => {
-			if (usernameInput.value.length < 4) {
-				badReg.innerText = "El nombre de usuario debe tener más de 4 caracteres";
-				badReg.style.display = "flex";
-				usernameInput.style.border = "1px solid red";
-				usernameInput.style.backgroundColor = "#FFCCCC";
-				return false;
-			} else {
-				usernameInput.style.border = "1px solid black";
-				usernameInput.style.backgroundColor = "white";
-				badReg.style.display = "none";
-			}
+		const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+		if (!emailInput.value.match(emailPattern)) {
+			badReg.innerText = "Formato de email incorrecto";
+			badReg.style.display = "flex";
+			emailInput.style.border = "1px solid red";
+			emailInput.style.backgroundColor = "#FFCCCC";
+			return false;
+		} else {
+			emailInput.style.border = "1px solid black";
+			emailInput.style.backgroundColor = "white";
+			badReg.style.display = "none";
+		}
 
-			const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-			if (!emailInput.value.match(emailPattern)) {
-				badReg.innerText = "Formato de email incorrecto";
-				badReg.style.display = "flex";
-				emailInput.style.border = "1px solid red";
-				emailInput.style.backgroundColor = "#FFCCCC";
-				return false;
-			} else {
-				emailInput.style.border = "1px solid black";
-				emailInput.style.backgroundColor = "white";
-				badReg.style.display = "none";
-			}
+		if (passwordInput.value.length < 4) {
+			badReg.innerText = "La contraseña debe tener más de 4 caracteres";
+			badReg.style.display = "flex";
+			passwordInput.style.border = "1px solid red";
+			passwordInput.style.backgroundColor = "#FFCCCC";
+			return false;
+		} else {
+			passwordInput.style.border = "1px solid black";
+			passwordInput.style.backgroundColor = "white";
+			badReg.style.display = "none";
+		}
+		return true;
+	};
 
-			if (passwordInput.value.length < 4) {
-				badReg.innerText = "La contraseña debe tener más de 4 caracteres";
-				badReg.style.display = "flex";
-				passwordInput.style.border = "1px solid red";
-				passwordInput.style.backgroundColor = "#FFCCCC";
-				return false;
-			} else {
-				passwordInput.style.border = "1px solid black";
-				passwordInput.style.backgroundColor = "white";
-				badReg.style.display = "none";
-			}
-			return true;
-		};
+	if (validateForm()) {
+		try {
+			const response = await fetch("http://localhost:3000/api/v1/auth/register", {
+				headers: {
+					"Content-Type": "application/json",
+				},
+				method: "POST",
+				body: JSON.stringify({
+					username,
+					email,
+					password,
+				}),
+			});
 
-		if (validateForm()) {
 			const dataRes = await response.json();
 			if (response.ok) {
 				goodReg.style.display = "flex";
@@ -76,9 +78,11 @@ const registerSubmit = async (ev) => {
 				badReg.innerText = dataRes.message || "Error al registrarse";
 				console.error(dataRes.message || "Error al registrarse");
 			}
+		} catch (error) {
+			badReg.style.display = "flex";
+			badReg.innerText = "Error en la solicitud de registro";
+			console.error("Error en la solicitud de registro:", error);
 		}
-	} catch (error) {
-		console.error("Error en la solicitud de registro:", error);
 	}
 };
 

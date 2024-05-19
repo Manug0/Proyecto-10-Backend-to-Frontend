@@ -1,23 +1,20 @@
+import { attendeesList } from "./AttendeesList";
+
 export const registrationForm = (user, event, token) => {
 	const formOverlay = document.createElement("div");
 	formOverlay.classList.add("overlay");
 
 	const form = document.createElement("form");
 	form.innerHTML = `
-      <i class="ri-close-line"></i>
-      <label for="name">Nombre:</label>
-      <input ${
-				user ? `value=${user.user.username}` : ""
-			} type="text" id="name" name="name" required>
-      <label for="email">Correo electrónico:</label>
-      <input ${
-				user ? `value=${user.user.email}` : ""
-			} type="email" id="email" name="email" required>
-      <input type="submit" value="Apuntarse">
-  `;
+		<i class="ri-close-line"></i>
+		<label for="name">Nombre:</label>
+		<input ${user ? `value="${user.user.username}"` : ""} type="text" id="name" name="name" required>
+		<label for="email">Correo electrónico:</label>
+		<input ${user ? `value="${user.user.email}"` : ""} type="email" id="email" name="email" required>
+		<input type="submit" value="Apuntarse">
+	`;
 
 	formOverlay.appendChild(form);
-
 	document.querySelector("#event-details").appendChild(formOverlay);
 
 	document.querySelector("#event-details .ri-close-line").addEventListener("click", () => {
@@ -28,19 +25,10 @@ export const registrationForm = (user, event, token) => {
 	form.addEventListener("submit", async (ev) => {
 		ev.preventDefault();
 
-		const name = document.querySelector("#name").value;
+		const username = document.querySelector("#name").value;
 		const email = document.querySelector("#email").value;
 
-		const attendeeData = await fetch(`http://localhost:3000/api/v1/attendees`, {
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
-		});
-		const attendeeDetails = await attendeeData.json();
-
-		const isEmailUsed = attendeeDetails.some((attendee) => attendee.email === email);
-
-		if (!isEmailUsed) {
+		try {
 			const confirmEventData = await fetch(
 				`http://localhost:3000/api/v1/events/confirm/${event._id}`,
 				{
@@ -49,23 +37,23 @@ export const registrationForm = (user, event, token) => {
 						Authorization: `Bearer ${token}`,
 					},
 					method: "PUT",
-					body: JSON.stringify({ name, email }),
+					body: JSON.stringify({ username, email }),
 				}
 			);
 
 			if (confirmEventData.ok) {
-				const registerDetails = await confirmEventData.json();
+				await attendeesList(event, token);
 
-				const attendeesList = document.querySelector(".attendees-list");
-				const attendeeItem = document.createElement("p");
-				attendeeItem.classList.add("confirmedAttendee");
-				attendeeItem.textContent = registerDetails.attendee.name;
-				attendeesList.appendChild(attendeeItem);
+				form.remove();
+				formOverlay.remove();
 			} else {
-				console.log("Ha habido un error al apuntarse al evento");
+				const errorData = await confirmEventData.json();
+				console.error("Error:", errorData.message);
+				alert("Ha habido un error al apuntarse al evento: " + errorData.message);
 			}
-		} else {
-			alert("Ya te has registrado para este evento con este correo electrónico.");
+		} catch (error) {
+			console.error("Error de red:", error);
+			alert("Ha habido un error al apuntarse al evento.");
 		}
 	});
 };

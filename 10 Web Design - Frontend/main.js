@@ -2,7 +2,7 @@ import Events from "./pages/Events/events";
 import { Home } from "./pages/Home/home";
 import { Login } from "./pages/Login/login";
 import "./style.css";
-import "./global.css";
+// import "./global.css";
 import "./variables.css";
 
 // Login();

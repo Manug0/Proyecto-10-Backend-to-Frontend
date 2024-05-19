@@ -12,6 +12,7 @@ export const EventDetails = async (event, user) => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
+
 		const eventDetails = await eventData.json();
 
 		const welcomeMsg = document.querySelector(".welcome-msg");
@@ -31,10 +32,14 @@ export const EventDetails = async (event, user) => {
                     <h3>${eventDetails.location}</h3>
                     <p>${eventDetails.description}</p>
                     <button class="register">Apuntarse</button>
-                </div>							
-								<div class="attendees-list">
+                </div>
+									<div class="attendees-list-container">
 										<h4>Lista de asistentes</h4>
+										<div class="attendees-list">
+												
+										</div>
 								</div>
+								
             </div>
         `;
 
