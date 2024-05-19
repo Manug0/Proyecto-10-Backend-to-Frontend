@@ -1,7 +1,7 @@
 import { loginSubmit } from "./loginSubmit";
 
 const registerSubmit = async (ev) => {
-	ev.preventDefault(); // Prevent the form from submitting the default way
+	ev.preventDefault();
 
 	const username = document.querySelector(".usernameReg").value;
 	const email = document.querySelector(".emailReg").value;
