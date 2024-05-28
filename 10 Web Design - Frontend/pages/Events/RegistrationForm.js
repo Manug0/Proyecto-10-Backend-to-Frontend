@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../../main";
 import { attendeesList } from "./AttendeesList";
 
 export const registrationForm = (user, event, token) => {
@@ -29,17 +30,14 @@ export const registrationForm = (user, event, token) => {
 		const email = document.querySelector("#email").value;
 
 		try {
-			const confirmEventData = await fetch(
-				`http://localhost:3000/api/v1/events/confirm/${event._id}`,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
-					},
-					method: "PUT",
-					body: JSON.stringify({ username, email }),
-				}
-			);
+			const confirmEventData = await fetch(`${API_BASE_URL}/events/confirm/${event._id}`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				method: "PUT",
+				body: JSON.stringify({ username, email }),
+			});
 
 			if (confirmEventData.ok) {
 				await attendeesList(event, token);

@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../main";
+
 const submitEvent = async (name, date, location, description, poster) => {
 	const user = JSON.parse(localStorage.getItem("user"));
 	const token = user.token;
@@ -9,7 +11,7 @@ const submitEvent = async (name, date, location, description, poster) => {
 	formData.append("description", description);
 	formData.append("poster", poster);
 
-	const response = await fetch("http://localhost:3000/api/v1/events/add", {
+	const response = await fetch(`${API_BASE_URL}/events/add`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},

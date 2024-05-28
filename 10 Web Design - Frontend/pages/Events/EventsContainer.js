@@ -1,9 +1,10 @@
+import { API_BASE_URL } from "../../main";
 import { EventDetails } from "./EventsDetails";
 import "./events.css";
 
 const EventsContainer = async () => {
 	const user = JSON.parse(localStorage.getItem("user"));
-	const eventsData = await fetch("http://localhost:3000/api/v1/events", {
+	const eventsData = await fetch(`${API_BASE_URL}/events`, {
 		headers: {
 			Authorization: `Bearer ${localStorage.getItem("token")}`,
 		},

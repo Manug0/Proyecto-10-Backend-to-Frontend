@@ -2,11 +2,11 @@ import Events from "./pages/Events/events";
 import { Home } from "./pages/Home/home";
 import { Login } from "./pages/Login/login";
 import "./style.css";
-// import "./global.css";
 import "./variables.css";
 
-// Login();
 Events();
+
+export const API_BASE_URL = "http://localhost:3000/api/v1";
 
 const loginNav = document.getElementById("explorelink");
 const homeNav = document.getElementById("homelink");
@@ -20,7 +20,6 @@ if (user) {
 loginNav.addEventListener("click", () => {
 	if (user) {
 		localStorage.removeItem("user");
-		// location.reload();
 		Login();
 	} else {
 		Login();

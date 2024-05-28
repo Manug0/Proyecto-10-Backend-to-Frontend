@@ -1,6 +1,8 @@
+import { API_BASE_URL } from "../../main";
+
 export const attendeesList = async (event, token) => {
 	try {
-		const response = await fetch(`http://localhost:3000/api/v1/users`, {
+		const response = await fetch(`${API_BASE_URL}/users`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},

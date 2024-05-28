@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../../main";
 import { loginSubmit } from "./loginSubmit";
 
 const registerSubmit = async (ev) => {
@@ -56,7 +57,7 @@ const registerSubmit = async (ev) => {
 
 	if (validateForm()) {
 		try {
-			const response = await fetch("http://localhost:3000/api/v1/auth/register", {
+			const response = await fetch(`${API_BASE_URL}/auth/register`, {
 				headers: {
 					"Content-Type": "application/json",
 				},

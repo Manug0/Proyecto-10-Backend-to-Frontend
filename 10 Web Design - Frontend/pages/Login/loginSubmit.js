@@ -1,11 +1,11 @@
-import Events from "../Events/events";
+import { API_BASE_URL } from "../../main";
 
 const loginSubmit = async (username, password) => {
 	const badLogin = document.querySelector(".wrong-login-msg");
 	const goodLogin = document.querySelector(".login-msg");
 
 	try {
-		const response = await fetch("http://localhost:3000/api/v1/auth/login", {
+		const response = await fetch(`${API_BASE_URL}/auth/login`, {
 			headers: {
 				"Content-Type": "application/json",
 			},

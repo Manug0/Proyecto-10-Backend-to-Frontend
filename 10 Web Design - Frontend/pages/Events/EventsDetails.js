@@ -3,11 +3,12 @@ import { attendeesList } from "./AttendeesList";
 import registrationForm from "./RegistrationForm";
 import "./event-details.css";
 import "./create-event.css";
+import { API_BASE_URL } from "../../main";
 
 export const EventDetails = async (event, user) => {
 	if (user) {
 		const token = user.token;
-		const eventData = await fetch(`http://localhost:3000/api/v1/events/${event._id}`, {
+		const eventData = await fetch(`${API_BASE_URL}/events/${event._id}`, {
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
